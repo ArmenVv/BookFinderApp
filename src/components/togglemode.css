@@ -1,0 +1,16 @@
+.button-container {
+    height: 40px;
+    width: 100px;
+    border: solid 2px black;
+    border-radius: 10px;
+    position: fixed;
+    cursor: pointer;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+}
+.button-container img {
+    height: 40px;
+    width: 40px;
+}
