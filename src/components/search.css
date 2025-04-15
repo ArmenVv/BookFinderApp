@@ -1,0 +1,54 @@
+.books-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+.book {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.inputBook {
+    height: 40px;
+    font-size: 28px;
+    width: 350px;
+}
+.searchBook {
+    height: 43px;
+    font-size: 32px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.notif {
+    font-size: 32px;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 400px;
+}
+.loading-container span {
+    font-size: 32px;
+}
+.loading-animation {
+    height: 70px;
+    width: 70px;
+    border: 10px solid black;
+    border-radius: 100%;
+    border-top-color: white;
+    animation: loading 1s linear infinite;
+    align-self: center;
+}
+@keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
+.global-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
