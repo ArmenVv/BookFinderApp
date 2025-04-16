@@ -11,6 +11,9 @@ export default function Search() {
     const [loading, setLoading] = useState(false);
     const [pageLoading,setPageLoading] = useState(true);
     
+    const bookMouseOver = () => {
+
+    }
     useEffect(()=>{
     const defFetch = async () => {
         setLoading(true);
@@ -62,12 +65,16 @@ export default function Search() {
                 books.length>0 ? (
                     <div className="books-container">
                         {books.map((books,index)=>(
-                            <div className="book">
+                            <div className="book" onMouseEnter={(e)=>e.currentTarget.classList.add('grey-hover')}
+                                onMouseLeave={(e)=>e.currentTarget.classList.remove('grey-hover')}>
                             {
                               books.cover_i ? (
                               <>
                               <img src={`https://covers.openlibrary.org/b/id/${books.cover_i}-L.jpg`}/>
-                              <span key={index}>{books.title}</span> </>) : (<></>)}
+                              <span key={index}>
+                                {books.title.length<18?books.title:`${books.title.slice(0,18)}...`}</span>
+                               <span>{books.author_name[0]}</span>
+                               <span>{books.first_publish_year}</span></>):null}
                             </div>
                         ))}
                     </div>
