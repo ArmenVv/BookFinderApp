@@ -10,10 +10,7 @@ export default function Search() {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pageLoading,setPageLoading] = useState(true);
-    
-    const bookMouseOver = () => {
-
-    }
+    const [hoveredId,setHoveredId] = useState(null);
     useEffect(()=>{
     const defFetch = async () => {
         setLoading(true);
@@ -64,17 +61,20 @@ export default function Search() {
             </div>) :(
                 books.length>0 ? (
                     <div className="books-container">
-                        {books.map((books,index)=>(
-                            <div className="book" onMouseEnter={(e)=>e.currentTarget.classList.add('grey-hover')}
-                                onMouseLeave={(e)=>e.currentTarget.classList.remove('grey-hover')}>
-                            {
-                              books.cover_i ? (
+                        {books.map((book,index)=>(
+                            <div className="book">   
+                              {book.cover_i ? (
                               <>
-                              <img src={`https://covers.openlibrary.org/b/id/${books.cover_i}-L.jpg`}/>
-                              <span key={index}>
-                                {books.title.length<18?books.title:`${books.title.slice(0,18)}...`}</span>
-                               <span>{books.author_name[0]}</span>
-                               <span>{books.first_publish_year}</span></>):null}
+                              <img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`} key={index} onMouseEnter={()=>setHoveredId(index)} onMouseLeave={()=>setHoveredId(null)} style = {{
+                                filter : hoveredId===index ? "grayscale(100%)" : "grayscale(0%)",
+                                transition : hoveredId===index ? "filter 0.3s ease" : "",
+                                cursor : hoveredId===index ? "pointer" : ""
+                        }} /> 
+                              {(hoveredId === index) && (<div className="star"><button><h1>⭐</h1></button></div>)}
+                              <span>
+                                {book.title.length<18?book.title:`${book.title.slice(0,18)}...`}</span>
+                               <span>{book.author_name[0]}</span>
+                               <span>{book.first_publish_year}</span></>):null}
                             </div>
                         ))}
                     </div>

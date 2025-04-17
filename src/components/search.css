@@ -59,8 +59,27 @@
     align-items: center;
     gap: 50px;
 }
-.grey-hover {
-    filter: grayscale(100%);
-    transition: filter 0.3s ease;
-    cursor: pointer;
+.star {
+    pointer-events: none;
+    filter: none;
+    transition: opacity 0.3s ease;
+    color: gold;
+}
+.star {
+    margin-top: 180px;
+    position: absolute;
+    align-self: center; 
+    font-size: 43px;
+}
+.star button {  
+    border: none;
+    background-color: transparent;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.star button h1 {
+   font-size: 60px;
 }
