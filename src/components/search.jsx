@@ -11,13 +11,19 @@ export default function Search() {
   const [pageLoading, setPageLoading] = useState(true);
   const [hoveredId, setHoveredId] = useState(null);
   const [favorites,setFavorites] = useState([]);
+  const [notifications,setNotifications] = useState("");
 
-  const toggleFavorite = (bookKey) => {
+  const toggleFavorite = (bookKey,bookTitle,bookCover) => {
     if(favorites.includes(bookKey)){
         setFavorites(favorites.filter((key)=>key!==bookKey));
+        setNotifications(`${bookTitle} was removed from favorites`);
+        setTimeout(()=>setNotifications(""),3000);
     }
-    else
+    else{
         setFavorites([...favorites,bookKey]);
+        setNotifications(`${bookTitle} was added to favorites`);
+        setTimeout(()=>setNotifications(""),3000);
+    }
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
   useEffect(() => {
@@ -69,6 +75,7 @@ export default function Search() {
         className="inputBook"
         placeholder="Search book..."
       />
+      {notifications && (<div className="Notification">{notifications}</div>)}
       {loading ? (
         <div className="loading-container">
           <span>Loading...</span>
