@@ -12,8 +12,11 @@ export default function Search() {
   const [hoveredId, setHoveredId] = useState(null);
   const [favorites,setFavorites] = useState([]);
   const [notifications,setNotifications] = useState("");
+  const [page,setPage] = useState(1);
+  const [numFound,setNumFound] = useState(0);
+  const PAGE_SIZE = 20;
 
-  const toggleFavorite = (bookKey,bookTitle,bookCover) => {
+  const toggleFavorite = (bookKey,bookTitle) => {
     if(favorites.includes(bookKey)){
         setFavorites(favorites.filter((key)=>key!==bookKey));
         setNotifications(`${bookTitle} was removed from favorites`);
@@ -25,39 +28,43 @@ export default function Search() {
         setTimeout(()=>setNotifications(""),3000);
     }
   }
-  localStorage.setItem("favorites", JSON.stringify(favorites));
+  useEffect(()=>localStorage.setItem("favorites", JSON.stringify(favorites)),[favorites]);
   useEffect(() => {
     const defFetch = async () => {
       setLoading(true);
-      const defRes = await FetchBooks(0);
-      setBooks(defRes);
+      const start = (page-1)*PAGE_SIZE;
+      const defRes = await FetchBooks(0,start);
+      setBooks(defRes.docs);
+      setNumFound(defRes.numFound);
       setLoading(false);
     };
     defFetch();
     const timer = setTimeout(() => {
       setPageLoading(false);
-    }, 3000);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   const handleChange = (event) => {
     setInputVal(event.target.value);
+    setPage(1);
+    
   };
   useEffect(() => {
     const delayFetch = setTimeout(async () => {
       setLoading(true);
-      if (!inputVal) {
-        const defRes = await FetchBooks(0);
-        setBooks(defRes);
-        setLoading(false);
-        return;
-      }
-      const results = await FetchBooks(inputVal);
-      setBooks(results);
+      const start =(page-1)*PAGE_SIZE;
+      console.log(start);
+      const results = await FetchBooks(inputVal||0,start);
+      setBooks(results.docs);
+      setNumFound(results.numFound);
+      console.log(results.start)
       setLoading(false);
-    }, 3000);
+    }, 500);
     return () => clearTimeout(delayFetch);
-  }, [inputVal]);
+  }, [inputVal,page]);
+
+  const totalPages = Math.ceil(numFound/PAGE_SIZE);
   if (pageLoading) {
     return (
       <div className="loading-container">
@@ -82,6 +89,7 @@ export default function Search() {
           <div className="loading-animation"></div>
         </div>
       ) : books.length > 0 ? (
+        <>
         <div className="books-container">
           {books.map((book, index) => (
             <div className="book">
@@ -118,6 +126,12 @@ export default function Search() {
             </div>
           ))}
         </div>
+        <div>
+        <button onClick={()=>{setPage(p=>Math.max(p-1,1));}} disabled={page===1}>Previous</button>
+        <span>{page} of {totalPages}</span>
+        <button onClick={()=>setPage(p=>(p<totalPages?p+1:p))} disabled={page===totalPages}>Next</button>
+        </div>
+        </>
       ) : (
         <p className="notif">There are no such books</p>
       )}

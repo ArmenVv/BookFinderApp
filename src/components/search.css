@@ -90,7 +90,7 @@
 }
 
 .Notification {
-    position: absolute;
+    position: fixed;
     border: solid 5px black;
     border-radius: 10px;
     margin-left: 1000px;
@@ -98,6 +98,8 @@
     width: 300px;
     font-size: 23px;
     animation: fadeInOut 3s ease forwards;
+    z-index: 999;
+    background-color: aquamarine;
 }
 @keyframes fadeInOut {
     0% { opacity: 0; transform: translateY(-10px); }
