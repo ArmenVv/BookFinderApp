@@ -1,4 +1,3 @@
-import { use, useState } from "react"
 import "./togglemode.css"
 export default function ToggleMode({toggleBg, handleToggle}){
     return (

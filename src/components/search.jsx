@@ -54,16 +54,13 @@ export default function Search() {
     const delayFetch = setTimeout(async () => {
       setLoading(true);
       const start =(page-1)*PAGE_SIZE;
-      console.log(start);
       const results = await FetchBooks(inputVal||0,start);
-      setBooks(results.docs);
-      setNumFound(results.numFound);
-      console.log(results.start)
+      setBooks(results.docs || []);
+      setNumFound(results.numFound||0);
       setLoading(false);
-    }, 500);
+    }, 1500);
     return () => clearTimeout(delayFetch);
   }, [inputVal,page]);
-
   const totalPages = Math.ceil(numFound/PAGE_SIZE);
   if (pageLoading) {
     return (
@@ -93,7 +90,7 @@ export default function Search() {
         <div className="books-container">
           {books.map((book, index) => (
             <div className="book">
-              {book.cover_i ? (
+              {book.cover_i ?  (
                 <>
                   <div className="star">
                     <button onClick={() => toggleFavorite(book.key,book.title,book.cover_i)}>
@@ -102,7 +99,8 @@ export default function Search() {
                   </div>
                   <img
                     src={`https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
-                    key={index}
+                    alt={book.title}
+                    key={book.cover_i}
                     onMouseEnter={() => setHoveredId(index)}
                     onMouseLeave={() => setHoveredId(null)}
                     style={{
@@ -114,7 +112,7 @@ export default function Search() {
                       cursor: hoveredId === index ? "pointer" : "",
                     }}
                   />
-                  <span key={book.key || index}>
+                  <span key={book.key}>
                     {book.title.length < 18
                       ? book.title
                       : `${book.title.slice(0, 18)}...`}
